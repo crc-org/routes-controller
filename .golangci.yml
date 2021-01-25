@@ -1,0 +1,15 @@
+run:
+  build-tags:
+    - build
+  timeout: 10m
+
+linters:
+  enable:
+    - errcheck
+    - goimports
+    - gofmt
+    - gosec
+    - gocritic
+    - deadcode
+    - misspell
+    - golint

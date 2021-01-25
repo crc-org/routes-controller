@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: routes-controller
+  namespace: openshift-ingress
+spec:
+  serviceAccountName: router
+  containers:
+    - name: routes-controller
+      image: quay.io/gurose/routes-controller:v1
+      imagePullPolicy: IfNotPresent
+  restartPolicy: Always
