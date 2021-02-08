@@ -1,4 +1,5 @@
 TAG ?= $(shell git describe --match=NeVeRmAtCh --always --abbrev=40 --dirty)
+CONTAINER_RUNTIME ?= podman
 
 LDFLAGS = -ldflags '-s -w -extldflags "-static"'
 
@@ -17,4 +18,4 @@ lint:
 
 .PHONY: image
 image:
-	docker build -t quay.io/crcont/routes-controller:$(TAG) .
+	${CONTAINER_RUNTIME} build -t quay.io/crcont/routes-controller:$(TAG) .
