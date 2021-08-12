@@ -3,6 +3,6 @@ WORKDIR $APP_ROOT/src
 COPY . .
 RUN make
 
-FROM scratch
+FROM registry.access.redhat.com/ubi8/ubi
 COPY --from=build /opt/app-root/src/routes-controller .
 ENTRYPOINT ["/routes-controller"]
