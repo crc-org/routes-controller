@@ -40,10 +40,7 @@ func run() error {
 	}
 
 	stop := make(chan struct{})
-	if err := routesController(stop, clientset); err != nil {
-		return err
-	}
-	return nil
+	return routesController(stop, clientset)
 }
 
 func routesController(stopCh chan struct{}, clientset *routeclientset.Clientset) error {
