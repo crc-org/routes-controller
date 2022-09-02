@@ -18,4 +18,4 @@ lint:
 
 .PHONY: image
 image:
-	${CONTAINER_RUNTIME} build -t quay.io/crcont/routes-controller:$(TAG) -f images .
+	${CONTAINER_RUNTIME} build -t quay.io/crcont/routes-controller:$(TAG) -f images/Dockerfile .

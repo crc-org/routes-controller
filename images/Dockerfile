@@ -1,8 +1,9 @@
-FROM registry.access.redhat.com/ubi8/go-toolset:1.15.14 AS build
+FROM quay.io/centos/centos:stream9 AS build
 WORKDIR $APP_ROOT/src
+RUN yum -y install golang
 COPY . .
 RUN make
 
-FROM registry.access.redhat.com/ubi8/ubi
-COPY --from=build /opt/app-root/src/routes-controller .
+FROM quay.io/centos/centos:stream9
+COPY --from=build /src/routes-controller .
 ENTRYPOINT ["/routes-controller"]
