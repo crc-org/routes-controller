@@ -1,4 +1,4 @@
-module github.com/code-ready/routes-controller
+module github.com/crc-org/routes-controller
 
 go 1.18
 
