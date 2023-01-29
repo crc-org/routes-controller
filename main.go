@@ -11,13 +11,20 @@ import (
 var (
 	master     string
 	kubeconfig string
+	debug      bool
 )
 
 func main() {
 	// setup args
+	flag.BoolVar(&debug, "debug", false, "Print debug info")
 	flag.StringVar(&master, "master", "", "master url")
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.Parse()
+
+	// setup logging
+	if debug {
+		log.SetLevel(log.DebugLevel)
+	}
 
 	// build config
 	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
