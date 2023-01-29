@@ -6,6 +6,7 @@ require (
 	github.com/openshift/api v0.0.0-20220525145417-ee5b62754c68
 	github.com/openshift/client-go v0.0.0-20220525160904-9e1acff93e4a
 	github.com/sirupsen/logrus v1.9.0
+	k8s.io/api v0.24.1
 	k8s.io/client-go v0.24.1
 )
 
@@ -42,7 +43,6 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	k8s.io/api v0.24.1 // indirect
 	k8s.io/apimachinery v0.24.1 // indirect
 	k8s.io/klog/v2 v2.70.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20220803162953-67bda5d908f1 // indirect
