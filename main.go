@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	nodeporthandler "github.com/code-ready/routes-controller/pkg/node-port-handler"
-	routeshandler "github.com/code-ready/routes-controller/pkg/routes-handler"
+	nodeporthandler "github.com/crc-org/routes-controller/pkg/node-port-handler"
+	routeshandler "github.com/crc-org/routes-controller/pkg/routes-handler"
 	routeclientset "github.com/openshift/client-go/route/clientset/versioned"
 	log "github.com/sirupsen/logrus"
 	"k8s.io/client-go/kubernetes"
