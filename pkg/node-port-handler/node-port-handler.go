@@ -13,7 +13,10 @@ import (
 	"time"
 )
 
-const vmVirtualIP = "192.168.127.2"
+const (
+	vmVirtualIP = "192.168.127.2"
+	localhost   = "127.0.0.1"
+)
 
 func NodePortHandler(clientset *kubernetes.Clientset) cache.SharedIndexInformer {
 	factory := informers.NewSharedInformerFactory(clientset, 5*time.Minute)
@@ -88,7 +91,7 @@ type UnexposeRequest struct {
 
 func expose(nodePort int32) error {
 	exposeRequest := ExposeRequest{
-		Local:  fmt.Sprintf(":%d", nodePort),
+		Local:  fmt.Sprintf("%s:%d", localhost, nodePort),
 		Remote: fmt.Sprintf("%s:%d", vmVirtualIP, nodePort),
 	}
 	log.Infof("Exposing port (%s -> %s)", exposeRequest.Local, exposeRequest.Remote)
