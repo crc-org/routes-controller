@@ -3,8 +3,8 @@ module github.com/crc-org/routes-controller
 go 1.20
 
 require (
-	github.com/openshift/api v0.0.0-20231117205818-971e4ba78c9a
-	github.com/openshift/client-go v0.0.0-20230807132528-be5346fb33cb
+	github.com/openshift/api v0.0.0-20240228005710-4511c790cc60
+	github.com/openshift/client-go v0.0.0-20240109161853-2425b4b6d3b3
 	github.com/sirupsen/logrus v1.9.3
 	k8s.io/api v0.28.8
 	k8s.io/client-go v0.28.8
