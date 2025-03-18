@@ -3,8 +3,8 @@ module github.com/crc-org/routes-controller
 go 1.22.0
 
 require (
-	github.com/openshift/api v0.0.0-20240228005710-4511c790cc60
-	github.com/openshift/client-go v0.0.0-20240109161853-2425b4b6d3b3
+	github.com/openshift/api v0.0.0-20250305013520-e7f23be12279
+	github.com/openshift/client-go v0.0.0-20241107164952-923091dd2b1a
 	github.com/sirupsen/logrus v1.9.3
 	k8s.io/api v0.31.7
 	k8s.io/client-go v0.31.7
@@ -33,11 +33,11 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
-	golang.org/x/net v0.26.0 // indirect
+	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/oauth2 v0.21.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/term v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/sys v0.25.0 // indirect
+	golang.org/x/term v0.24.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
@@ -46,7 +46,7 @@ require (
 	k8s.io/apimachinery v0.31.7 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20240228011516-70dd3763d340 // indirect
-	k8s.io/utils v0.0.0-20240711033017-18e509b52bc8 // indirect
+	k8s.io/utils v0.0.0-20240921022957-49e7df575cb6 // indirect
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.1 // indirect
 	sigs.k8s.io/yaml v1.4.0 // indirect
