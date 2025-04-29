@@ -1,6 +1,6 @@
 module github.com/crc-org/routes-controller
 
-go 1.22.0
+go 1.23
 
 require (
 	github.com/openshift/api v0.0.0-20250305013520-e7f23be12279
