@@ -1,6 +1,6 @@
 module github.com/crc-org/routes-controller
 
-go 1.22.0
+go 1.23.0
 
 require (
 	github.com/openshift/api v0.0.0-20250305013520-e7f23be12279
@@ -34,7 +34,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	golang.org/x/net v0.29.0 // indirect
-	golang.org/x/oauth2 v0.21.0 // indirect
+	golang.org/x/oauth2 v0.27.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/term v0.24.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
