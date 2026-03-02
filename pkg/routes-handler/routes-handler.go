@@ -48,13 +48,40 @@ func RoutesHandler(clientset *routeclientset.Clientset) cache.SharedIndexInforme
 	return informer
 }
 
+var addHostURLs = []string{
+	"http://gateway/hosts/add",
+	"http://host:9764/hosts/add",
+}
+
+var removeHostURLs = []string{
+	"http://gateway/hosts/remove",
+	"http://host:9764/hosts/remove",
+}
+
+// postJSON sends a POST request with JSON body to url and returns an error on failure or non-2xx status.
+func postJSON(url string, body []byte) error {
+	resp, err := http.Post(url, "application/json", bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		log.Errorf("%s: server returned %d", url, resp.StatusCode)
+	}
+	return nil
+}
+
 func expose(host string) error {
 	bin, err := json.Marshal([]string{host})
 	if err != nil {
 		return err
 	}
-	_, err = http.Post("http://gateway/hosts/add", "application/json", bytes.NewReader(bin))
-	return err
+	for _, url := range addHostURLs {
+		if err := postJSON(url, bin); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func unexpose(host string) error {
@@ -62,6 +89,10 @@ func unexpose(host string) error {
 	if err != nil {
 		return err
 	}
-	_, err = http.Post("http://gateway/hosts/remove", "application/json", bytes.NewReader(bin))
-	return err
+	for _, url := range removeHostURLs {
+		if err := postJSON(url, bin); err != nil {
+			return err
+		}
+	}
+	return nil
 }
