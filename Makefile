@@ -12,6 +12,10 @@ vendor:
 	go mod tidy
 	go mod vendor
 
+.PHONY: test
+test:
+	go test ./...
+
 .PHONY: lint
 lint:
 	golangci-lint run
