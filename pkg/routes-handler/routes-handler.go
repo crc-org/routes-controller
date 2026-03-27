@@ -3,6 +3,8 @@ package routes_handler
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -66,9 +68,23 @@ func postJSON(url string, body []byte) error {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		log.Errorf("%s: server returned %d", url, resp.StatusCode)
+		return fmt.Errorf("%s: server returned %d", url, resp.StatusCode)
 	}
 	return nil
+}
+
+// postJSONFirstSuccess tries URLs in order and returns nil on the first successful POST.
+// It does not call later URLs after success. If every URL fails, returns errors joined from each attempt.
+func postJSONFirstSuccess(urls []string, body []byte) error {
+	var errs []error
+	for _, url := range urls {
+		if err := postJSON(url, body); err != nil {
+			errs = append(errs, err)
+			continue
+		}
+		return nil
+	}
+	return errors.Join(errs...)
 }
 
 func expose(host string) error {
@@ -76,12 +92,7 @@ func expose(host string) error {
 	if err != nil {
 		return err
 	}
-	for _, url := range addHostURLs {
-		if err := postJSON(url, bin); err != nil {
-			return err
-		}
-	}
-	return nil
+	return postJSONFirstSuccess(addHostURLs, bin)
 }
 
 func unexpose(host string) error {
@@ -89,10 +100,5 @@ func unexpose(host string) error {
 	if err != nil {
 		return err
 	}
-	for _, url := range removeHostURLs {
-		if err := postJSON(url, bin); err != nil {
-			return err
-		}
-	}
-	return nil
+	return postJSONFirstSuccess(removeHostURLs, bin)
 }
