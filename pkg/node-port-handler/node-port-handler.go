@@ -1,16 +1,17 @@
-package node_port_handler
+package nodeporthandler
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
-	"net/http"
-	"time"
 )
 
 const (
@@ -22,7 +23,7 @@ func NodePortHandler(clientset *kubernetes.Clientset) cache.SharedIndexInformer 
 	factory := informers.NewSharedInformerFactory(clientset, 5*time.Minute)
 	informer := factory.Core().V1().Services().Informer()
 
-	informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
+	_, err := informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
 			service := obj.(*v1.Service)
 			log.Infof("Added service '%s' of type '%s'", service.GetName(), service.Spec.Type)
@@ -76,6 +77,9 @@ func NodePortHandler(clientset *kubernetes.Clientset) cache.SharedIndexInformer 
 			}
 		},
 	})
+	if err != nil {
+		log.Errorf("failed to add event handler: %v", err)
+	}
 
 	return informer
 }

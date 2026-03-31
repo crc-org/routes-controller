@@ -1,3 +1,6 @@
+TOOLS_DIR := tools
+include tools/tools.mk
+
 TAG ?= $(shell git describe --match=NeVeRmAtCh --always --abbrev=40 --dirty)
 CONTAINER_RUNTIME ?= podman
 
@@ -17,8 +20,8 @@ test:
 	go test ./...
 
 .PHONY: lint
-lint:
-	golangci-lint run
+lint: $(TOOLS_BINDIR)/golangci-lint
+	"$(TOOLS_BINDIR)"/golangci-lint run
 
 .PHONY: image
 image:

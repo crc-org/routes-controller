@@ -1,0 +1,9 @@
+TOOLS_BINDIR := $(abspath $(TOOLS_DIR)/bin)
+
+
+$(TOOLS_BINDIR)/golangci-lint: $(TOOLS_DIR)/go.mod | $(TOOLS_BINDIR)
+	cd $(TOOLS_DIR) && GOBIN="$(TOOLS_BINDIR)" go install \
+	github.com/golangci/golangci-lint/v2/cmd/golangci-lint
+
+$(TOOLS_BINDIR):
+	mkdir -p $@

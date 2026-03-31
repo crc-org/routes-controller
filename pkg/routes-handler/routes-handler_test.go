@@ -1,4 +1,4 @@
-package routes_handler
+package routeshandler
 
 import (
 	"encoding/json"
@@ -24,7 +24,7 @@ func TestExpose_FirstURLSucceeds(t *testing.T) {
 	}))
 	defer srv1.Close()
 
-	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calledSecondURL.Add(1)
 		w.WriteHeader(http.StatusOK)
 	}))
@@ -46,7 +46,7 @@ func TestExpose_FirstURLSucceeds(t *testing.T) {
 func TestExpose_FirstURLFails_SecondSucceeds(t *testing.T) {
 	var calledFirstURL, calledSecondURL atomic.Int32
 
-	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calledFirstURL.Add(1)
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
@@ -82,7 +82,7 @@ func TestUnexpose_FirstURLSucceeds(t *testing.T) {
 	}))
 	defer srv1.Close()
 
-	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calledSecondURL.Add(1)
 		w.WriteHeader(http.StatusOK)
 	}))
@@ -104,7 +104,7 @@ func TestUnexpose_FirstURLSucceeds(t *testing.T) {
 func TestUnexpose_FirstURLFails_SecondSucceeds(t *testing.T) {
 	var calledFirstURL, calledSecondURL atomic.Int32
 
-	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		calledFirstURL.Add(1)
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
@@ -131,12 +131,12 @@ func TestUnexpose_FirstURLFails_SecondSucceeds(t *testing.T) {
 }
 
 func TestExpose_BothURLsFail(t *testing.T) {
-	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusBadGateway)
 	}))
 	defer srv1.Close()
 
-	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusServiceUnavailable)
 	}))
 	defer srv2.Close()
@@ -149,12 +149,12 @@ func TestExpose_BothURLsFail(t *testing.T) {
 }
 
 func TestUnexpose_BothURLsFail(t *testing.T) {
-	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv1 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusBadGateway)
 	}))
 	defer srv1.Close()
 
-	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	srv2 := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusServiceUnavailable)
 	}))
 	defer srv2.Close()

@@ -2,15 +2,16 @@ package main
 
 import (
 	"flag"
+	"os"
+	"os/signal"
+	"syscall"
+
 	nodeporthandler "github.com/crc-org/routes-controller/pkg/node-port-handler"
 	routeshandler "github.com/crc-org/routes-controller/pkg/routes-handler"
 	routeclientset "github.com/openshift/client-go/route/clientset/versioned"
 	log "github.com/sirupsen/logrus"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 var (
@@ -35,30 +36,28 @@ func main() {
 	config, err := clientcmd.BuildConfigFromFlags(master, kubeconfig)
 	if err != nil {
 		log.Fatal(err)
-		return
+	}
+
+	// run node port handler
+	nodePortClientSet, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// run routes handler
+	routesClientSet, err := routeclientset.NewForConfig(config)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	// setup informer stop channel
 	stop := make(chan struct{})
 	defer close(stop)
 
-	// run node port handler
-	nodePortClientSet, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
 	nodePortHandler := nodeporthandler.NodePortHandler(nodePortClientSet)
 	go func() {
 		nodePortHandler.Run(stop)
 	}()
-
-	// run routes handler
-	routesClientSet, err := routeclientset.NewForConfig(config)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
 	routePortHandler := routeshandler.RoutesHandler(routesClientSet)
 	go func() {
 		routePortHandler.Run(stop)
@@ -67,8 +66,5 @@ func main() {
 	// block until sigterm
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGTERM)
-	select {
-	case <-signalCh:
-		return
-	}
+	<-signalCh
 }

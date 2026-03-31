@@ -1,4 +1,4 @@
-package routes_handler
+package routeshandler
 
 import (
 	"bytes"
@@ -18,7 +18,7 @@ import (
 func RoutesHandler(clientset *routeclientset.Clientset) cache.SharedIndexInformer {
 	factory := informers.NewSharedInformerFactory(clientset, 5*time.Minute)
 	informer := factory.Route().V1().Routes().Informer()
-	informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
+	_, err := informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
 			route := obj.(*v1.Route)
 			log.Infof("added: %s %s", route.GetName(), route.Spec.Host)
@@ -47,6 +47,9 @@ func RoutesHandler(clientset *routeclientset.Clientset) cache.SharedIndexInforme
 			}
 		},
 	})
+	if err != nil {
+		log.Errorf("failed to add event handler: %v", err)
+	}
 	return informer
 }
 
@@ -62,11 +65,12 @@ var removeHostURLs = []string{
 
 // postJSON sends a POST request with JSON body to url and returns an error on failure or non-2xx status.
 func postJSON(url string, body []byte) error {
+	//nolint:gosec // URL are constants from addHostURLs or removeHostURLs
 	resp, err := http.Post(url, "application/json", bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return fmt.Errorf("%s: server returned %d", url, resp.StatusCode)
 	}
