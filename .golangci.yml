@@ -1,15 +1,22 @@
+version: "2"
 run:
-  build-tags:
-    - build
   timeout: 10m
-
 linters:
+  default: standard
   enable:
     - errcheck
-    - goimports
-    - gofmt
-    - gosec
     - gocritic
-    - deadcode
+    - gosec
     - misspell
     - revive
+    - unused
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
