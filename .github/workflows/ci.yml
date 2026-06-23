@@ -18,6 +18,7 @@ jobs:
       - uses: actions/setup-go@v6
         with:
           go-version: oldstable
+      - run: make lint
 
   test:
     name: Unit Test
