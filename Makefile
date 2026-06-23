@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := build
+
 TOOLS_DIR := tools
 include tools/tools.mk
 
