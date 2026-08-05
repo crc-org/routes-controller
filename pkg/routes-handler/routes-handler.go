@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	v1 "github.com/openshift/api/route/v1"
@@ -63,10 +64,26 @@ var removeHostURLs = []string{
 	"http://host:9764/hosts/remove",
 }
 
+func hostsAPIToken() string {
+	tok := os.Getenv("CRC_HOSTS_API_TOKEN")
+	if tok == "" {
+		log.Warn("CRC_HOSTS_API_TOKEN is not set; hosts API requests will be unauthenticated")
+	}
+	return tok
+}
+
 // postJSON sends a POST request with JSON body to url and returns an error on failure or non-2xx status.
 func postJSON(url string, body []byte) error {
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if tok := hostsAPIToken(); tok != "" {
+		req.Header.Set("Authorization", "Bearer "+tok)
+	}
 	//nolint:gosec // URL are constants from addHostURLs or removeHostURLs
-	resp, err := http.Post(url, "application/json", bytes.NewReader(body))
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
 	}
