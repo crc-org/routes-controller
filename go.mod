@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/openshift/api v0.0.0-20250305013520-e7f23be12279
 	github.com/openshift/client-go v0.0.0-20241107164952-923091dd2b1a
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.10.1
 	k8s.io/api v0.31.14
 	k8s.io/client-go v0.31.14
 )
