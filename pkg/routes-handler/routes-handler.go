@@ -65,9 +65,9 @@ var removeHostURLs = []string{
 }
 
 func hostsAPIToken() string {
-	tok := os.Getenv("CRC_HOSTS_API_TOKEN")
+	tok := os.Getenv("CRC_REST_API_TOKEN")
 	if tok == "" {
-		log.Warn("CRC_HOSTS_API_TOKEN is not set; hosts API requests will be unauthenticated")
+		log.Warn("CRC_REST_API_TOKEN is not set; hosts API requests will be unauthenticated")
 	}
 	return tok
 }
