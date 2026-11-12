@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	routeshandler "github.com/crc-org/routes-controller/pkg/routes-handler"
 	log "github.com/sirupsen/logrus"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/informers"
@@ -93,6 +94,10 @@ type UnexposeRequest struct {
 	Local string
 }
 
+var exposeURL = "http://host/services/forwarder/expose"
+
+var unexposeURL = "http://host/services/forwarder/unexpose"
+
 func expose(nodePort int32) error {
 	exposeRequest := ExposeRequest{
 		Local:  fmt.Sprintf("%s:%d", localhost, nodePort),
@@ -105,8 +110,7 @@ func expose(nodePort int32) error {
 		return err
 	}
 
-	_, err = http.Post("http://host/services/forwarder/expose", "application/json", bytes.NewReader(bin))
-	return err
+	return post(exposeURL, bin)
 }
 
 func unexpose(nodePort int32) error {
@@ -120,6 +124,22 @@ func unexpose(nodePort int32) error {
 		return err
 	}
 
-	_, err = http.Post("http://host/services/forwarder/unexpose", "application/json", bytes.NewReader(bin))
-	return err
+	return post(unexposeURL, bin)
+}
+
+// post sends body as JSON to url with the crc REST API bearer token.
+func post(url string, body []byte) error {
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if tok := routeshandler.HostsAPIToken(); tok != "" {
+		req.Header.Set("Authorization", "Bearer "+tok)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	return resp.Body.Close()
 }
