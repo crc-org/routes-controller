@@ -64,10 +64,11 @@ var removeHostURLs = []string{
 	"http://host:9764/hosts/remove",
 }
 
-func hostsAPIToken() string {
+// HostsAPIToken returns the crc REST API token used as bearer token for crc daemon API requests.
+func HostsAPIToken() string {
 	tok := os.Getenv("CRC_REST_API_TOKEN")
 	if tok == "" {
-		log.Warn("CRC_REST_API_TOKEN is not set; hosts API requests will be unauthenticated")
+		log.Warn("CRC_REST_API_TOKEN is not set; crc daemon API requests will be unauthenticated and rejected by current crc")
 	}
 	return tok
 }
@@ -79,7 +80,7 @@ func postJSON(url string, body []byte) error {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	if tok := hostsAPIToken(); tok != "" {
+	if tok := HostsAPIToken(); tok != "" {
 		req.Header.Set("Authorization", "Bearer "+tok)
 	}
 	//nolint:gosec // URL are constants from addHostURLs or removeHostURLs
